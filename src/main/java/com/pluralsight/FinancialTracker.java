@@ -1,6 +1,6 @@
 package com.pluralsight;
 
-import java.io.File;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -35,30 +35,35 @@ public class FinancialTracker {
        Main menu
        ------------------------------------------------------------------ */
     public static void main(String[] args) {
-        loadTransactions(FILE_NAME);
+        try {
+            loadTransactions(FILE_NAME);
 
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
 
-        while (running) {
-            System.out.println("Welcome to TransactionApp");
-            System.out.println("Choose an option:");
-            System.out.println("D) Add Deposit");
-            System.out.println("P) Make Payment (Debit)");
-            System.out.println("L) Ledger");
-            System.out.println("X) Exit");
+            Scanner scanner = new Scanner(System.in);
+            boolean running = true;
 
-            String input = scanner.nextLine().trim();
+            while (running) {
+                System.out.println("Welcome to TransactionApp");
+                System.out.println("Choose an option:");
+                System.out.println("D) Add Deposit");
+                System.out.println("P) Make Payment (Debit)");
+                System.out.println("L) Ledger");
+                System.out.println("X) Exit");
 
-            switch (input.toUpperCase()) {
-                case "D" -> addDeposit(scanner);
-                case "P" -> addPayment(scanner);
-                case "L" -> ledgerMenu(scanner);
-                case "X" -> running = false;
-                default -> System.out.println("Invalid option");
+                String input = scanner.nextLine().trim();
+
+                switch (input.toUpperCase()) {
+                    //                case "D" -> addDeposit(scanner);
+                    //                case "P" -> addPayment(scanner);
+                    //                case "L" -> ledgerMenu(scanner);
+                    case "X" -> running = false;
+                    default -> System.out.println("Invalid option");
+                }
             }
+            scanner.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        scanner.close();
     }
 
     /* ------------------------------------------------------------------
@@ -70,128 +75,144 @@ public class FinancialTracker {
      * • If the file doesn’t exist, create an empty one so that future writes succeed.
      * • Each line looks like: date|time|description|vendor|amount
      */
-    public static void loadTransactions(String fileName) {
+    public static void loadTransactions(String fileName) throws IOException {
         // TODO: create file if it does not exist, then read each line,
         //       parse the five fields, build a Transaction object,
         //       and add it to the transactions list.
-    }
+        FileReader fileReader = new FileReader(fileName);
+        BufferedReader trackerBufReader = new BufferedReader(fileReader);
+        String line;
+        while ((line = trackerBufReader.readLine()) != null) {
+            String[] tokens = line.split("\\|");
+            String date = tokens[0];
+            String time = tokens[1];
+            String description = tokens[2];
+            String vendor = tokens[3];
+            double amount = Double.parseDouble(tokens[4]);
+            Transaction transaction = new Transaction(date, time, description, vendor, amount);
+
+            System.out.println(transaction.getDescription() + " , "+ transaction.getAmount());
+
+
+        }
 
     /* ------------------------------------------------------------------
        Add new transactions
        ------------------------------------------------------------------ */
 
-    /**
-     * Prompt for ONE date+time string in the format
-     * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
-     * Validate that the amount entered is positive.
-     * Store the amount as-is (positive) and append to the file.
-     */
-    private static void addDeposit(Scanner scanner) {
-        // TODO
-    }
+        /**
+         * Prompt for ONE date+time string in the format
+         * "yyyy-MM-dd HH:mm:ss", plus description, vendor, amount.
+         * Validate that the amount entered is positive.
+         * Store the amount as-is (positive) and append to the file.
+         */
+        private static void addDeposit (Scanner scanner){
+            // TODO
+        }
 
-    /**
-     * Same prompts as addDeposit.
-     * Amount must be entered as a positive number,
-     * then converted to a negative amount before storing.
-     */
-    private static void addPayment(Scanner scanner) {
-        // TODO
-    }
+        /**
+         * Same prompts as addDeposit.
+         * Amount must be entered as a positive number,
+         * then converted to a negative amount before storing.
+         */
+        private static void addPayment (Scanner scanner){
+            // TODO
+        }
 
     /* ------------------------------------------------------------------
        Ledger menu
        ------------------------------------------------------------------ */
-    private static void ledgerMenu(Scanner scanner) {
-        boolean running = true;
-        while (running) {
-            System.out.println("Ledger");
-            System.out.println("Choose an option:");
-            System.out.println("A) All");
-            System.out.println("D) Deposits");
-            System.out.println("P) Payments");
-            System.out.println("R) Reports");
-            System.out.println("H) Home");
+        private static void ledgerMenu (Scanner scanner){
+            boolean running = true;
+            while (running) {
+                System.out.println("Ledger");
+                System.out.println("Choose an option:");
+                System.out.println("A) All");
+                System.out.println("D) Deposits");
+                System.out.println("P) Payments");
+                System.out.println("R) Reports");
+                System.out.println("H) Home");
 
-            String input = scanner.nextLine().trim();
+                String input = scanner.nextLine().trim();
 
-            switch (input.toUpperCase()) {
-                case "A" -> displayLedger();
-                case "D" -> displayDeposits();
-                case "P" -> displayPayments();
-                case "R" -> reportsMenu(scanner);
-                case "H" -> running = false;
-                default -> System.out.println("Invalid option");
+                switch (input.toUpperCase()) {
+                    case "A" -> displayLedger();
+                    case "D" -> displayDeposits();
+                    case "P" -> displayPayments();
+                    case "R" -> reportsMenu(scanner);
+                    case "H" -> running = false;
+                    default -> System.out.println("Invalid option");
+                }
             }
         }
-    }
 
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-    private static void displayLedger() { /* TODO – print all transactions in column format */ }
+        private static void displayLedger () { /* TODO – print all transactions in column format */ }
 
-    private static void displayDeposits() { /* TODO – only amount > 0               */ }
+        private static void displayDeposits () { /* TODO – only amount > 0               */ }
 
-    private static void displayPayments() { /* TODO – only amount < 0               */ }
+        private static void displayPayments () { /* TODO – only amount < 0               */ }
 
     /* ------------------------------------------------------------------
        Reports menu
        ------------------------------------------------------------------ */
-    private static void reportsMenu(Scanner scanner) {
-        boolean running = true;
-        while (running) {
-            System.out.println("Reports");
-            System.out.println("Choose an option:");
-            System.out.println("1) Month To Date");
-            System.out.println("2) Previous Month");
-            System.out.println("3) Year To Date");
-            System.out.println("4) Previous Year");
-            System.out.println("5) Search by Vendor");
-            System.out.println("6) Custom Search");
-            System.out.println("0) Back");
+        private static void reportsMenu (Scanner scanner){
+            boolean running = true;
+            while (running) {
+                System.out.println("Reports");
+                System.out.println("Choose an option:");
+                System.out.println("1) Month To Date");
+                System.out.println("2) Previous Month");
+                System.out.println("3) Year To Date");
+                System.out.println("4) Previous Year");
+                System.out.println("5) Search by Vendor");
+                System.out.println("6) Custom Search");
+                System.out.println("0) Back");
 
-            String input = scanner.nextLine().trim();
+                String input = scanner.nextLine().trim();
 
-            switch (input) {
-                case "1" -> {/* TODO – month-to-date report */ }
-                case "2" -> {/* TODO – previous month report */ }
-                case "3" -> {/* TODO – year-to-date report   */ }
-                case "4" -> {/* TODO – previous year report  */ }
-                case "5" -> {/* TODO – prompt for vendor then report */ }
-                case "6" -> customSearch(scanner);
-                case "0" -> running = false;
-                default -> System.out.println("Invalid option");
+                switch (input) {
+                    case "1" -> {/* TODO – month-to-date report */ }
+                    case "2" -> {/* TODO – previous month report */ }
+                    case "3" -> {/* TODO – year-to-date report   */ }
+                    case "4" -> {/* TODO – previous year report  */ }
+                    case "5" -> {/* TODO – prompt for vendor then report */ }
+                    case "6" -> customSearch(scanner);
+                    case "0" -> running = false;
+                    default -> System.out.println("Invalid option");
+                }
             }
         }
-    }
 
     /* ------------------------------------------------------------------
        Reporting helpers
        ------------------------------------------------------------------ */
-    private static void filterTransactionsByDate(LocalDate start, LocalDate end) {
-        // TODO – iterate transactions, print those within the range
-    }
+        private static void filterTransactionsByDate (LocalDate start, LocalDate end){
+            // TODO – iterate transactions, print those within the range
+        }
 
-    private static void filterTransactionsByVendor(String vendor) {
-        // TODO – iterate transactions, print those with matching vendor
-    }
+        private static void filterTransactionsByVendor (String vendor){
+            // TODO – iterate transactions, print those with matching vendor
+        }
 
-    private static void customSearch(Scanner scanner) {
-        // TODO – prompt for any combination of date range, description,
-        //        vendor, and exact amount, then display matches
-    }
+        private static void customSearch (Scanner scanner){
+            // TODO – prompt for any combination of date range, description,
+            //        vendor, and exact amount, then display matches
+        }
 
     /* ------------------------------------------------------------------
        Utility parsers (you can reuse in many places)
        ------------------------------------------------------------------ */
-    private static LocalDate parseDate(String s) {
-        /* TODO – return LocalDate or null */
-        return null;
-    }
+        private static LocalDate parseDate (String s){
+            /* TODO – return LocalDate or null */
+            return null;
+        }
 
-    private static Double parseDouble(String s) {
-        /* TODO – return Double   or null */
-        return null;
+        private static Double parseDouble (String s){
+            /* TODO – return Double   or null */
+            return null;
+        }
     }
 }
