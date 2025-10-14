@@ -53,9 +53,9 @@ public class FinancialTracker {
                 String input = scanner.nextLine().trim();
 
                 switch (input.toUpperCase()) {
-                    //                case "D" -> addDeposit(scanner);
-                    //                case "P" -> addPayment(scanner);
-                    //                case "L" -> ledgerMenu(scanner);
+                    case "D" -> addDeposit(scanner);
+                    case "P" -> addPayment(scanner);
+                    case "L" -> ledgerMenu(scanner);
                     case "X" -> running = false;
                     default -> System.out.println("Invalid option");
                 }
@@ -84,17 +84,18 @@ public class FinancialTracker {
         String line;
         while ((line = trackerBufReader.readLine()) != null) {
             String[] tokens = line.split("\\|");
-            String date = tokens[0];
-            String time = tokens[1];
+            LocalDate date = LocalDate.parse(tokens[0], DATE_FMT);
+            LocalTime time = LocalTime.parse(tokens[1], TIME_FMT);
             String description = tokens[2];
             String vendor = tokens[3];
             double amount = Double.parseDouble(tokens[4]);
             Transaction transaction = new Transaction(date, time, description, vendor, amount);
 
-            System.out.println(transaction.getDescription() + " , "+ transaction.getAmount());
+//            System.out.println(transaction.getDescription() + " , " + transaction.getAmount() + " , " + transaction.getDate() + " , " + transaction.getTime());
 
 
         }
+    }
 
     /* ------------------------------------------------------------------
        Add new transactions
@@ -108,7 +109,27 @@ public class FinancialTracker {
          */
         private static void addDeposit (Scanner scanner){
             // TODO
+            System.out.println("Please enter the date/time of your deposit in the following format (\"yyyy-MM-dd HH:mm:ss\"");
+            String depositDateTime = scanner.nextLine();
+            System.out.println("Please enter a description of your deposit");
+            String depositDescription = scanner.nextLine();
+            System.out.println("Please enter the vendor of your deposit");
+            String depositVendor = scanner.nextLine();
+            boolean validDepositAmount;
+            double depositAmount;
+            do {
+                System.out.println("Please enter the amount of your deposit");
+                depositAmount = scanner.nextDouble();
+                validDepositAmount = depositAmount > 0;
+                if (!validDepositAmount) {
+                    System.out.println("Please enter a positive deposit amount!");
+                }
+            } while (!validDepositAmount);
+            LocalDate depositDate = LocalDate.parse(depositDateTime, DATE_FMT);
+            LocalTime depositTime = LocalTime.parse(depositDateTime, TIME_FMT);
+            Transaction deposit = new Transaction(depositDate, depositTime, depositDescription, depositVendor, depositAmount);
         }
+
 
         /**
          * Same prompts as addDeposit.
@@ -215,4 +236,3 @@ public class FinancialTracker {
             return null;
         }
     }
-}
