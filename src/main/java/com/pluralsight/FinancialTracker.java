@@ -124,7 +124,7 @@ public class FinancialTracker {
                 System.out.println("Please enter the amount of your deposit");
                 depositAmount = scanner.nextDouble();
                 scanner.nextLine();
-                validDepositAmount = depositAmount >= 0;
+                validDepositAmount = depositAmount > 0;
                 if (!validDepositAmount) {
                     System.out.println("Invalid deposit amount");
                 }
@@ -164,7 +164,7 @@ public class FinancialTracker {
                 System.out.println("Please enter the amount of your payment");
                 paymentAmount = scanner.nextDouble();
                 scanner.nextLine();
-                validPaymentAmount = paymentAmount >= 0;
+                validPaymentAmount = paymentAmount > 0;
                 if (!validPaymentAmount) {
                     System.out.println("Invalid payment amount");
                 }
@@ -224,9 +224,35 @@ public class FinancialTracker {
         }
 
 
-        private static void displayDeposits () { /* TODO – only amount > 0               */ }
+        private static void displayDeposits () { /* TODO – only amount > 0               */
+            System.out.println("Deposits:");
+            System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+            int depositCounter = 0;
+            for (Transaction transaction : transactions) {
+                if (transaction.getAmount() > 0) {
+                    System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                    depositCounter++;
+                }
+            }
+            if (depositCounter == 0) {
+                System.out.println("No deposits have been made to this account");
+            }
+        }
 
-        private static void displayPayments () { /* TODO – only amount < 0               */ }
+        private static void displayPayments () { /* TODO – only amount < 0               */
+            System.out.println("Payments:");
+            System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+            int paymentCounter = 0;
+            for (Transaction transaction : transactions) {
+                if (transaction.getAmount() < 0) {
+                    System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                    paymentCounter++;
+                }
+            }
+            if (paymentCounter == 0) {
+                System.out.println("No payments have been made from this account");
+            }
+        }
 
     /* ------------------------------------------------------------------
        Reports menu
