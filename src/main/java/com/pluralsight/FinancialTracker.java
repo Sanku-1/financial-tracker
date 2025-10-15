@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -31,11 +32,12 @@ public class FinancialTracker {
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern(TIME_PATTERN);
     private static final DateTimeFormatter DATETIME_FMT = DateTimeFormatter.ofPattern(DATETIME_PATTERN);
 
+
     /* ------------------------------------------------------------------
        Main menu
        ------------------------------------------------------------------ */
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args) throws IOException {
+//        try {
             loadTransactions(FILE_NAME);
 
 
@@ -61,10 +63,8 @@ public class FinancialTracker {
                 }
             }
             scanner.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
-    }
+
 
     /* ------------------------------------------------------------------
        File I/O
@@ -81,6 +81,8 @@ public class FinancialTracker {
         //       and add it to the transactions list.
         FileReader fileReader = new FileReader(fileName);
         BufferedReader trackerBufReader = new BufferedReader(fileReader);
+//        FileWriter fileWriter = new FileWriter(fileName);
+//        BufferedWriter trackerBufWriter = new BufferedWriter(fileWriter);
         String line;
         while ((line = trackerBufReader.readLine()) != null) {
             String[] tokens = line.split("\\|");
@@ -89,9 +91,11 @@ public class FinancialTracker {
             String description = tokens[2];
             String vendor = tokens[3];
             double amount = Double.parseDouble(tokens[4]);
-            Transaction transaction = new Transaction(date, time, description, vendor, amount);
 
-//            System.out.println(transaction.getDescription() + " , " + transaction.getAmount() + " , " + transaction.getDate() + " , " + transaction.getTime());
+            Transaction transaction = new Transaction(date, time, description, vendor, amount);
+            transactions.add(transaction);
+
+            System.out.println(transaction.getDescription() + " , " + transaction.getAmount() + " , " + transaction.getDate() + " , " + transaction.getTime());
 
 
         }
@@ -107,9 +111,9 @@ public class FinancialTracker {
          * Validate that the amount entered is positive.
          * Store the amount as-is (positive) and append to the file.
          */
-        private static void addDeposit (Scanner scanner){
+        private static void addDeposit (Scanner scanner) throws IOException {
             // TODO
-            System.out.println("Please enter the date/time of your deposit in the following format (\"yyyy-MM-dd HH:mm:ss\"");
+            System.out.println("Please enter the date/time of your deposit in the following format (yyyy-MM-dd HH:mm:ss)");
             String depositDateTime = scanner.nextLine();
             System.out.println("Please enter a description of your deposit");
             String depositDescription = scanner.nextLine();
@@ -120,14 +124,25 @@ public class FinancialTracker {
             do {
                 System.out.println("Please enter the amount of your deposit");
                 depositAmount = scanner.nextDouble();
+                scanner.nextLine();
                 validDepositAmount = depositAmount > 0;
                 if (!validDepositAmount) {
-                    System.out.println("Please enter a positive deposit amount!");
+                    System.out.println("Invalid deposit amount");
                 }
             } while (!validDepositAmount);
-            LocalDate depositDate = LocalDate.parse(depositDateTime, DATE_FMT);
-            LocalTime depositTime = LocalTime.parse(depositDateTime, TIME_FMT);
-            Transaction deposit = new Transaction(depositDate, depositTime, depositDescription, depositVendor, depositAmount);
+            LocalDateTime depositDateTimeParsed = LocalDateTime.parse(depositDateTime, DATETIME_FMT);
+            String depositDateParsed = depositDateTimeParsed.format(DATE_FMT);
+            String depositTimeParsed = depositDateTimeParsed.format(TIME_FMT);
+            LocalDate depositDateConverted = LocalDate.parse(depositDateParsed, DATE_FMT);
+            LocalTime depositTimeConverted = LocalTime.parse(depositTimeParsed, TIME_FMT);
+//            Transaction deposit = new Transaction(depositDateConverted, depositTimeConverted, depositDescription, depositVendor, depositAmount);
+//            transactions.add(deposit);
+            FileWriter fileWriter = new FileWriter(FILE_NAME, true);
+            BufferedWriter trackerBufWriter = new BufferedWriter(fileWriter);
+            trackerBufWriter.write(depositDateParsed + "|" + depositTimeParsed + "|" + depositDescription + "|" + depositVendor + "|" + depositAmount);
+            trackerBufWriter.newLine();
+            trackerBufWriter.close();
+            fileWriter.close();
         }
 
 
