@@ -134,12 +134,12 @@ public class FinancialTracker {
             String depositTimeParsed = depositDateTimeParsed.format(TIME_FMT);
             LocalDate depositDateConverted = LocalDate.parse(depositDateParsed, DATE_FMT);
             LocalTime depositTimeConverted = LocalTime.parse(depositTimeParsed, TIME_FMT);
-//            Transaction deposit = new Transaction(depositDateConverted, depositTimeConverted, depositDescription, depositVendor, depositAmount);
-//            transactions.add(deposit);
             FileWriter fileWriter = new FileWriter(FILE_NAME, true);
             BufferedWriter trackerBufWriter = new BufferedWriter(fileWriter);
             trackerBufWriter.write(depositDateParsed + "|" + depositTimeParsed + "|" + depositDescription + "|" + depositVendor + "|" + depositAmount);
             trackerBufWriter.newLine();
+            Transaction deposit = new Transaction(depositDateConverted, depositTimeConverted, depositDescription, depositVendor, depositAmount);
+            transactions.add(deposit);
             trackerBufWriter.close();
             fileWriter.close();
         }
@@ -173,12 +173,14 @@ public class FinancialTracker {
             LocalDateTime paymentDateTimeParsed = LocalDateTime.parse(paymentDateTime, DATETIME_FMT);
             String paymentDateParsed = paymentDateTimeParsed.format(DATE_FMT);
             String paymentTimeParsed = paymentDateTimeParsed.format(TIME_FMT);
-            LocalDate depositDateConverted = LocalDate.parse(paymentDateParsed, DATE_FMT);
-            LocalTime depositTimeConverted = LocalTime.parse(paymentTimeParsed, TIME_FMT);
+            LocalDate paymentDateConverted = LocalDate.parse(paymentDateParsed, DATE_FMT);
+            LocalTime paymentTimeConverted = LocalTime.parse(paymentTimeParsed, TIME_FMT);
             FileWriter fileWriter = new FileWriter(FILE_NAME, true);
             BufferedWriter trackerBufWriter = new BufferedWriter(fileWriter);
             trackerBufWriter.write(paymentDateParsed + "|" + paymentTimeParsed + "|" + paymentDescription + "|" + paymentVendor + "|" + paymentAmount);
             trackerBufWriter.newLine();
+            Transaction payment = new Transaction(paymentDateConverted, paymentTimeConverted, paymentDescription, paymentVendor, paymentAmount);
+            transactions.add(payment);
             trackerBufWriter.close();
             fileWriter.close();
         }
