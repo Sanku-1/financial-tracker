@@ -290,6 +290,14 @@ public class FinancialTracker {
        ------------------------------------------------------------------ */
         private static void filterTransactionsByDate (LocalDate start, LocalDate end){
             // TODO – iterate transactions, print those within the range
+            System.out.println("Transactions from " + start + " to " + end + ":");
+            System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+            int dateComparison = 0;
+            for (Transaction transaction : transactions) {
+                if (transaction.getDate().compareTo(start) >= 0 && transaction.getDate().compareTo(end) <= 0) {
+                    System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                }
+            }
         }
 
         private static void filterTransactionsByVendor (String vendor){
