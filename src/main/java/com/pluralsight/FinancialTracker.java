@@ -125,7 +125,7 @@ public class FinancialTracker {
                 System.out.println("Please enter the amount of your deposit");
                 depositAmount = scanner.nextDouble();
                 scanner.nextLine();
-                validDepositAmount = depositAmount > 0;
+                validDepositAmount = depositAmount >= 0;
                 if (!validDepositAmount) {
                     System.out.println("Invalid deposit amount");
                 }
@@ -151,8 +151,37 @@ public class FinancialTracker {
          * Amount must be entered as a positive number,
          * then converted to a negative amount before storing.
          */
-        private static void addPayment (Scanner scanner){
+        private static void addPayment (Scanner scanner) throws IOException {
             // TODO
+            System.out.println("Please enter the date/time of your deposit in the following format (yyyy-MM-dd HH:mm:ss)");
+            String paymentDateTime = scanner.nextLine();
+            System.out.println("Please enter a description of your deposit");
+            String paymentDescription = scanner.nextLine();
+            System.out.println("Please enter the vendor of your deposit");
+            String paymentVendor = scanner.nextLine();
+            boolean validPaymentAmount;
+            double paymentAmount;
+            do {
+                System.out.println("Please enter the amount of your deposit");
+                paymentAmount = scanner.nextDouble();
+                scanner.nextLine();
+                validPaymentAmount = paymentAmount >= 0;
+                if (!validPaymentAmount) {
+                    System.out.println("Invalid deposit amount");
+                }
+            } while (!validPaymentAmount);
+            paymentAmount = paymentAmount * -1;
+            LocalDateTime paymentDateTimeParsed = LocalDateTime.parse(paymentDateTime, DATETIME_FMT);
+            String paymentDateParsed = paymentDateTimeParsed.format(DATE_FMT);
+            String paymentTimeParsed = paymentDateTimeParsed.format(TIME_FMT);
+            LocalDate depositDateConverted = LocalDate.parse(paymentDateParsed, DATE_FMT);
+            LocalTime depositTimeConverted = LocalTime.parse(paymentTimeParsed, TIME_FMT);
+            FileWriter fileWriter = new FileWriter(FILE_NAME, true);
+            BufferedWriter trackerBufWriter = new BufferedWriter(fileWriter);
+            trackerBufWriter.write(paymentDateParsed + "|" + paymentTimeParsed + "|" + paymentDescription + "|" + paymentVendor + "|" + paymentAmount);
+            trackerBufWriter.newLine();
+            trackerBufWriter.close();
+            fileWriter.close();
         }
 
     /* ------------------------------------------------------------------
