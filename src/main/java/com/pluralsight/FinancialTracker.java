@@ -95,7 +95,6 @@ public class FinancialTracker {
             Transaction transaction = new Transaction(date, time, description, vendor, amount);
             transactions.add(transaction);
 
-            System.out.println(transaction.getDescription() + " , " + transaction.getAmount() + " , " + transaction.getDate() + " , " + transaction.getTime());
 
 
         }
@@ -153,21 +152,21 @@ public class FinancialTracker {
          */
         private static void addPayment (Scanner scanner) throws IOException {
             // TODO
-            System.out.println("Please enter the date/time of your deposit in the following format (yyyy-MM-dd HH:mm:ss)");
+            System.out.println("Please enter the date/time of your payment in the following format (yyyy-MM-dd HH:mm:ss)");
             String paymentDateTime = scanner.nextLine();
-            System.out.println("Please enter a description of your deposit");
+            System.out.println("Please enter a description of your payment");
             String paymentDescription = scanner.nextLine();
-            System.out.println("Please enter the vendor of your deposit");
+            System.out.println("Please enter the vendor of your payment");
             String paymentVendor = scanner.nextLine();
             boolean validPaymentAmount;
             double paymentAmount;
             do {
-                System.out.println("Please enter the amount of your deposit");
+                System.out.println("Please enter the amount of your payment");
                 paymentAmount = scanner.nextDouble();
                 scanner.nextLine();
                 validPaymentAmount = paymentAmount >= 0;
                 if (!validPaymentAmount) {
-                    System.out.println("Invalid deposit amount");
+                    System.out.println("Invalid payment amount");
                 }
             } while (!validPaymentAmount);
             paymentAmount = paymentAmount * -1;
@@ -214,7 +213,14 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Display helpers: show data in neat columns
        ------------------------------------------------------------------ */
-        private static void displayLedger () { /* TODO – print all transactions in column format */ }
+        private static void displayLedger () { /* TODO – print all transactions in column format */
+            System.out.println("All Transactions:");
+            System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+            for (Transaction transaction : transactions) {
+                System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+            }
+        }
+
 
         private static void displayDeposits () { /* TODO – only amount > 0               */ }
 
