@@ -306,7 +306,13 @@ public class FinancialTracker {
                         LocalDate previousMonthEnd = previousMonthStart.withDayOfMonth(previousMonthStart.lengthOfMonth());
                         filterTransactionsByDate(previousMonthStart, previousMonthEnd);
                     }
-                    case "3" -> {/* TODO – year-to-date report   */ }
+                    case "3" -> {/* TODO – year-to-date report   */
+                        LocalDate present = LocalDate.now();
+                        int currentYear = present.getYear();
+                        String currentYearString = Integer.toString(currentYear);
+                        LocalDate startOfYear = LocalDate.parse(currentYearString + "-01-01", DATE_FMT);
+                        filterTransactionsByDate(startOfYear, present);
+                    }
                     case "4" -> {/* TODO – previous year report  */ }
                     case "5" -> {/* TODO – prompt for vendor then report */ }
                     case "6" -> customSearch(scanner);
