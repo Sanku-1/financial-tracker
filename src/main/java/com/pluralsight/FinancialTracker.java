@@ -277,10 +277,35 @@ public class FinancialTracker {
                         LocalDate present = LocalDate.now();
                         int currentMonth = present.getMonthValue();
                         int currentYear = present.getYear();
-                        LocalDate startOfMonth = LocalDate.parse(currentYear + "-01-" + currentMonth, DATE_FMT);
+                        String currentMonthString = Integer.toString(currentMonth);
+                        String currentYearString = Integer.toString(currentYear);
+                        LocalDate startOfMonth = LocalDate.parse(currentYearString + "-" + currentMonthString + "-01", DATE_FMT);
                         filterTransactionsByDate(startOfMonth, present);
                     }
-                    case "2" -> {/* TODO – previous month report */ }
+                    case "2" -> {/* TODO – previous month report */
+                        LocalDate present = LocalDate.now();
+                        int currentMonth = present.getMonthValue();
+                        int currentYear = present.getYear();
+                        int previousMonth = 0;
+                        int previousYear = currentYear;
+                        String previousMonthString;
+                        if (currentMonth == 1) {
+                            previousMonth = 12;
+                            previousYear = currentYear - 1;
+                            previousMonthString = Integer.toString(previousMonth);
+                        } else if (currentMonth > 10){
+                            previousMonth = currentMonth - 1;
+                            previousMonthString = Integer.toString(previousMonth);
+                        } else {
+                            previousMonth = currentMonth - 1;
+                            previousMonthString = "0" + Integer.toString(previousMonth);
+                        }
+//                        String previousMonthString = Integer.toString(previousMonth);
+                        String previousYearString = Integer.toString(previousYear);
+                        LocalDate previousMonthStart = LocalDate.parse(previousYearString + "-" + previousMonthString + "-01" , DATE_FMT);
+                        LocalDate previousMonthEnd = previousMonthStart.withDayOfMonth(previousMonthStart.lengthOfMonth());
+                        filterTransactionsByDate(previousMonthStart, previousMonthEnd);
+                    }
                     case "3" -> {/* TODO – year-to-date report   */ }
                     case "4" -> {/* TODO – previous year report  */ }
                     case "5" -> {/* TODO – prompt for vendor then report */ }
