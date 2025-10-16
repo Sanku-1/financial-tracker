@@ -313,7 +313,13 @@ public class FinancialTracker {
                         LocalDate startOfYear = LocalDate.parse(currentYearString + "-01-01", DATE_FMT);
                         filterTransactionsByDate(startOfYear, present);
                     }
-                    case "4" -> {/* TODO – previous year report  */ }
+                    case "4" -> {/* TODO – previous year report  */
+                        int previousYear = LocalDate.now().getYear() - 1;
+                        String previousYearString = Integer.toString(previousYear);
+                        LocalDate previousYearStart = LocalDate.parse(previousYearString + "-01-01", DATE_FMT);
+                        LocalDate previousYearEnd = LocalDate.parse(previousYearString + "-12-31", DATE_FMT);
+                        filterTransactionsByDate(previousYearStart, previousYearEnd);
+                    }
                     case "5" -> {/* TODO – prompt for vendor then report */ }
                     case "6" -> customSearch(scanner);
                     case "0" -> running = false;
