@@ -393,7 +393,7 @@ public class FinancialTracker {
 //                }
 //            LocalDateTime searchTimeStampFormatted = LocalDateTime.parse(searchTimeStamp.format(DATETIME_FMT));
             LocalDateTime searchTimeStamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-            Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStamp);
+            Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStamp3);
             searches.add(newSearch);
 //                System.out.println("Criteria Searched:");
             int searchCounter = 0;
