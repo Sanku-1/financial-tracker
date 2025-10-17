@@ -39,9 +39,11 @@ Follow these steps to get your application running within IntelliJ IDEA:
 
 ## Demo
 
-Include screenshots or GIFs that show your application in action. Use tools like [Giphy Capture](https://giphy.com/apps/giphycapture) to record a GIF of your application.
 
-![Application Screenshot](path/to/your/screenshot.png)
+1. https://github.com/Sanku-1/financial-tracker/blob/c1863526623bf5b974280307b52789133862cc15/src/main/resources/Screenshots/Screenshot%202025-10-17%20at%209.06.54%E2%80%AFAM.png
+2. https://github.com/Sanku-1/financial-tracker/blob/c1863526623bf5b974280307b52789133862cc15/src/main/resources/Screenshots/Screenshot%202025-10-17%20at%209.07.52%E2%80%AFAM.png
+3. https://github.com/Sanku-1/financial-tracker/blob/c1863526623bf5b974280307b52789133862cc15/src/main/resources/Screenshots/Screenshot%202025-10-17%20at%209.08.08%E2%80%AFAM.png
+4. https://github.com/Sanku-1/financial-tracker/blob/c1863526623bf5b974280307b52789133862cc15/src/main/resources/Screenshots/Screenshot%202025-10-17%20at%209.08.20%E2%80%AFAM.png
 
 ## Future Work
 
