@@ -361,11 +361,8 @@ public class FinancialTracker {
         }
 
         private static void customSearch (Scanner scanner) {
-            // TODO – prompt for any combination of date range, description,
-            //        vendor, and exact amount, then display matches
             LocalDate endDateInputParsed = null;
             LocalDate startDateInputParsed = null;
-//            boolean after = false;
             double amountInputParsed = 0;
 //            try {
             System.out.println("Please enter the date range you would like to search your transactions for:");
@@ -388,14 +385,9 @@ public class FinancialTracker {
             if (!amountInput.isEmpty()){
                 amountInputParsed = Double.parseDouble(amountInput);
                 }
-//                if (endDateInputParsed == null && startDateInputParsed != null) {
-//                    after = true;
-//                }
-//            LocalDateTime searchTimeStampFormatted = LocalDateTime.parse(searchTimeStamp.format(DATETIME_FMT));
             LocalDateTime searchTimeStamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-            Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStamp3);
+            Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStamp);
             searches.add(newSearch);
-//                System.out.println("Criteria Searched:");
             int searchCounter = 0;
             System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
             for (Transaction transaction : transactions) {
