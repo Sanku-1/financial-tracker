@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Transaction {
+public class Transaction implements Comparable<Transaction>{
     public LocalDate date;
     public LocalTime time;
     public String description;
@@ -40,5 +40,12 @@ public class Transaction {
     }
 
 
-
+    @Override
+    public int compareTo(Transaction other) {
+        int cmp = other.date.compareTo(this.date);
+        if (cmp == 0) {
+            return other.time.compareTo(this.time);
+        }
+        return cmp;
+    }
 }
