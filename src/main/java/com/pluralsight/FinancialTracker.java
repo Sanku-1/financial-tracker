@@ -222,8 +222,13 @@ public class FinancialTracker {
         Collections.sort(transactions);
         System.out.println("All Transactions:");
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+        int transactionCounter = 0;
         for (Transaction transaction : transactions) {
             System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+            transactionCounter++;
+        }
+        if (transactionCounter == 0) {
+            System.out.println("This account has made no transactions");
         }
     }
 
@@ -343,10 +348,15 @@ public class FinancialTracker {
         Collections.sort(transactions);
         System.out.println("Transactions from " + start + " to " + end + ":");
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+        int dateCounter = 0;
         for (Transaction transaction : transactions) {
             if (transaction.getDate().compareTo(start) >= 0 && transaction.getDate().compareTo(end) <= 0) {
                 System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                dateCounter++;
             }
+        }
+        if (dateCounter == 0) {
+            System.out.println("No matching transactions found");
         }
     }
 
@@ -354,10 +364,15 @@ public class FinancialTracker {
         Collections.sort(transactions);
         System.out.println("Vendor Searched: " + vendor);
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+        int vendorCounter = 0;
         for (Transaction transaction : transactions) {
             if (vendor.equalsIgnoreCase(transaction.getVendor())) {
                 System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                vendorCounter++;
             }
+        }
+        if (vendorCounter == 0) {
+            System.out.println("No matching transactions found");
         }
     }
 
