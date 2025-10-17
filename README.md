@@ -3,7 +3,7 @@ Financial Tracker/Ledger Application
 
 ## Description of the Project
 
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
+This application allows the user to store and access transactions that they have made. It reads data from a provided csv, and outputs information based on user queries, filters, and menu selections. It also holds onto a record of all search queries in case the application owner would like to access the data for any reason in the future.
 
 ## User Stories
 - As a business owner, I want users' ledger search parameters to be saved and timestamped, so that they can be easily accessed and reused later.
@@ -48,14 +48,19 @@ Include screenshots or GIFs that show your application in action. Use tools like
 Outline potential future enhancements or functionalities you might consider adding:
 
 - Complete the GUI
-- Improvement of current functionalities.
+- Allow user to access search history or reuse old queries
+- Allowing the user to edit existing transactions
 
 ## Resources
 
 List resources such as tutorials, articles, or documentation that helped you during the project.
 
-- [Java Programming Tutorial](https://www.example.com)
-- [Effective Java](https://www.example.com)
+- https://www.geeksforgeeks.org/java/compare-dates-in-java/
+- LTCA Workbook 3A
+- https://codingtechroom.com/tutorial/java-java-last-day-month
+- https://www.w3schools.com/java/java_sort_list.asp
+- https://www.geeksforgeeks.org/java/localdate-parse-method-in-java-with-examples/
+- https://www.geeksforgeeks.org/java/comparable-interface-in-java-with-examples/
 
 ## Team Members
 
@@ -68,4 +73,5 @@ Express gratitude towards those who provided help, guidance, or resources:
 
 - Thank you to Raymond Maroun for continuous support and guidance.
 - A special thanks to all of my peers for their dedication and teamwork.
+
 
