@@ -22,6 +22,8 @@ public class FinancialTracker {
        Shared data and formatters
        ------------------------------------------------------------------ */
     private static final ArrayList<Transaction> transactions = new ArrayList<>();
+    private static final ArrayList<Search> searches = new ArrayList<>();
+
     private static final String FILE_NAME = "transactions.csv";
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
@@ -306,21 +308,21 @@ public class FinancialTracker {
                         LocalDate previousMonthEnd = previousMonthStart.withDayOfMonth(previousMonthStart.lengthOfMonth());
                         filterTransactionsByDate(previousMonthStart, previousMonthEnd);
                     }
-                    case "3" -> {/* TODO – year-to-date report   */
+                    case "3" -> {
                         LocalDate present = LocalDate.now();
                         int currentYear = present.getYear();
                         String currentYearString = Integer.toString(currentYear);
                         LocalDate startOfYear = LocalDate.parse(currentYearString + "-01-01", DATE_FMT);
                         filterTransactionsByDate(startOfYear, present);
                     }
-                    case "4" -> {/* TODO – previous year report  */
+                    case "4" -> {
                         int previousYear = LocalDate.now().getYear() - 1;
                         String previousYearString = Integer.toString(previousYear);
                         LocalDate previousYearStart = LocalDate.parse(previousYearString + "-01-01", DATE_FMT);
                         LocalDate previousYearEnd = LocalDate.parse(previousYearString + "-12-31", DATE_FMT);
                         filterTransactionsByDate(previousYearStart, previousYearEnd);
                     }
-                    case "5" -> {/* TODO – prompt for vendor then report */
+                    case "5" -> {
                         System.out.println("Please enter the name of the vendor you would like to search your transactions for:");
                         filterTransactionsByVendor(scanner.nextLine());
                     }
@@ -357,10 +359,77 @@ public class FinancialTracker {
             }
         }
 
-        private static void customSearch (Scanner scanner){
+        private static void customSearch (Scanner scanner) {
             // TODO – prompt for any combination of date range, description,
             //        vendor, and exact amount, then display matches
+            LocalDate endDateInputParsed = null;
+            LocalDate startDateInputParsed = null;
+            boolean after = false;
+            double amountInputParsed = 0;
+            try {
+                System.out.println("Please enter the date range you would like to search your transactions for:");
+                System.out.println("Start date in the following format (yyyy-MM-dd):");
+                String startDateInput = scanner.nextLine();
+                if (!startDateInput.isEmpty()) {
+                    startDateInputParsed = LocalDate.parse(startDateInput, DATE_FMT);
+                }
+                System.out.println("End date in the following format (yyyy-MM-dd):");
+                String endDateInput = scanner.nextLine();
+                if (!endDateInput.isEmpty()) {
+                    endDateInputParsed = LocalDate.parse(endDateInput, DATE_FMT);
+                }
+                System.out.println("Please enter the name of the description you would like to search your transactions for:");
+                String descriptionInput = scanner.nextLine();
+                System.out.println("Please enter the name of the vendor you would like to search your transactions for:");
+                String vendorInput = scanner.nextLine();
+                System.out.println("Please enter the name of the amount you would like to search your transactions for:");
+                String amountInput = scanner.nextLine();
+                if (!amountInput.isEmpty()){
+                    amountInputParsed = Double.parseDouble(amountInput);
+                }
+                if (endDateInputParsed == null && startDateInputParsed != null) {
+                    after = true;
+                }
+                LocalDateTime searchTimeStamp = LocalDateTime.now();
+                LocalDateTime searchTimeStampFormatted = LocalDateTime.parse(searchTimeStamp.format(DATETIME_FMT));
+                Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStampFormatted);
+                searches.add(newSearch);
+//                System.out.println("Criteria Searched:");
+                int searchCounter = 0;
+                System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+                for (Transaction transaction : transactions) {
+                    if (startDateInputParsed != null && endDateInputParsed != null) {
+                        if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                                System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                                searchCounter++;
+                        }
+                    } else if (startDateInputParsed != null && endDateInputParsed == null) {
+                        if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                            searchCounter++;
+                        }
+                    } else if (startDateInputParsed == null && endDateInputParsed != null) {
+                        if (transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                            searchCounter++;
+                        }
+                    } else if (startDateInputParsed == null && endDateInputParsed == null) {
+                        if ((transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                            searchCounter++;
+                        }
+
+                    }
+                }
+                if (searchCounter == 0) {
+                    System.out.println("No matching transactions found");
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing your search request");
+            }
         }
+
+
 
     /* ------------------------------------------------------------------
        Utility parsers (you can reuse in many places)
