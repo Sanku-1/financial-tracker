@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -364,70 +365,70 @@ public class FinancialTracker {
             //        vendor, and exact amount, then display matches
             LocalDate endDateInputParsed = null;
             LocalDate startDateInputParsed = null;
-            boolean after = false;
+//            boolean after = false;
             double amountInputParsed = 0;
-            try {
-                System.out.println("Please enter the date range you would like to search your transactions for:");
-                System.out.println("Start date in the following format (yyyy-MM-dd):");
-                String startDateInput = scanner.nextLine();
-                if (!startDateInput.isEmpty()) {
-                    startDateInputParsed = LocalDate.parse(startDateInput, DATE_FMT);
-                }
-                System.out.println("End date in the following format (yyyy-MM-dd):");
-                String endDateInput = scanner.nextLine();
-                if (!endDateInput.isEmpty()) {
-                    endDateInputParsed = LocalDate.parse(endDateInput, DATE_FMT);
-                }
-                System.out.println("Please enter the name of the description you would like to search your transactions for:");
-                String descriptionInput = scanner.nextLine();
-                System.out.println("Please enter the name of the vendor you would like to search your transactions for:");
-                String vendorInput = scanner.nextLine();
-                System.out.println("Please enter the name of the amount you would like to search your transactions for:");
-                String amountInput = scanner.nextLine();
-                if (!amountInput.isEmpty()){
-                    amountInputParsed = Double.parseDouble(amountInput);
-                }
-                if (endDateInputParsed == null && startDateInputParsed != null) {
-                    after = true;
-                }
-                LocalDateTime searchTimeStamp = LocalDateTime.now();
-                LocalDateTime searchTimeStampFormatted = LocalDateTime.parse(searchTimeStamp.format(DATETIME_FMT));
-                Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStampFormatted);
-                searches.add(newSearch);
-//                System.out.println("Criteria Searched:");
-                int searchCounter = 0;
-                System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
-                for (Transaction transaction : transactions) {
-                    if (startDateInputParsed != null && endDateInputParsed != null) {
-                        if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
-                                System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
-                                searchCounter++;
-                        }
-                    } else if (startDateInputParsed != null && endDateInputParsed == null) {
-                        if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
-                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
-                            searchCounter++;
-                        }
-                    } else if (startDateInputParsed == null && endDateInputParsed != null) {
-                        if (transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
-                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
-                            searchCounter++;
-                        }
-                    } else if (startDateInputParsed == null && endDateInputParsed == null) {
-                        if ((transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
-                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
-                            searchCounter++;
-                        }
-
-                    }
-                }
-                if (searchCounter == 0) {
-                    System.out.println("No matching transactions found");
-                }
-            } catch (Exception e) {
-                System.err.println("Error processing your search request");
+//            try {
+            System.out.println("Please enter the date range you would like to search your transactions for:");
+            System.out.println("Start date in the following format (yyyy-MM-dd):");
+            String startDateInput = scanner.nextLine();
+            if (!startDateInput.isEmpty()) {
+                startDateInputParsed = LocalDate.parse(startDateInput, DATE_FMT);
             }
-        }
+            System.out.println("End date in the following format (yyyy-MM-dd):");
+            String endDateInput = scanner.nextLine();
+            if (!endDateInput.isEmpty()) {
+                endDateInputParsed = LocalDate.parse(endDateInput, DATE_FMT);
+            }
+            System.out.println("Please enter the name of the description you would like to search your transactions for:");
+            String descriptionInput = scanner.nextLine();
+            System.out.println("Please enter the name of the vendor you would like to search your transactions for:");
+            String vendorInput = scanner.nextLine();
+            System.out.println("Please enter the name of the amount you would like to search your transactions for:");
+            String amountInput = scanner.nextLine();
+            if (!amountInput.isEmpty()){
+                amountInputParsed = Double.parseDouble(amountInput);
+                }
+//                if (endDateInputParsed == null && startDateInputParsed != null) {
+//                    after = true;
+//                }
+//            LocalDateTime searchTimeStampFormatted = LocalDateTime.parse(searchTimeStamp.format(DATETIME_FMT));
+            LocalDateTime searchTimeStamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+            Search newSearch = new Search(startDateInputParsed, endDateInputParsed, descriptionInput, vendorInput, amountInputParsed, searchTimeStamp);
+            searches.add(newSearch);
+//                System.out.println("Criteria Searched:");
+            int searchCounter = 0;
+            System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
+            for (Transaction transaction : transactions) {
+                if (startDateInputParsed != null && endDateInputParsed != null) {
+                    if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                            System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                            searchCounter++;
+                    }
+                } else if (startDateInputParsed != null && endDateInputParsed == null) {
+                    if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                        System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                        searchCounter++;
+                    }
+                } else if (startDateInputParsed == null && endDateInputParsed != null) {
+                    if (transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                        System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                        searchCounter++;
+                    }
+                } else if (startDateInputParsed == null && endDateInputParsed == null) {
+                    if ((transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
+                        System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
+                        searchCounter++;
+                    }
+
+                }
+            }
+            if (searchCounter == 0) {
+                System.out.println("No matching transactions found");
+            }
+//            } catch (Exception e) {
+//                System.err.println("Error processing your search request");
+//            }
+    }
 
 
 

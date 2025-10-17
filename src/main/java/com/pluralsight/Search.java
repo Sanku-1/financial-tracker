@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Search {
@@ -9,15 +10,15 @@ public class Search {
     public String description;
     public String vendor;
     public double amount;
-    public boolean after;
+    public LocalDateTime searchDateTime;
 
-    public Search(LocalDate startDate, LocalDate endDate, String description, String vendor, double amount, boolean after) {
+    public Search(LocalDate startDate, LocalDate endDate, String description, String vendor, double amount, LocalDateTime searchDateTime) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
-        this.after = after;
+        this.searchDateTime = searchDateTime;
     }
 
     public LocalDate getStartDate() {
