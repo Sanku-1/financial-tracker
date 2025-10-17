@@ -40,6 +40,7 @@ public class Transaction implements Comparable<Transaction>{
     }
 
 
+    //Added comparable interface in order to override the default compareTo() method to sort transactions by date, then time.
     @Override
     public int compareTo(Transaction other) {
         int cmp = other.date.compareTo(this.date);

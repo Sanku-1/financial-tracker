@@ -81,6 +81,7 @@ public class FinancialTracker {
         FileReader fileReader = new FileReader(fileName);
         BufferedReader trackerBufReader = new BufferedReader(fileReader);
         String line;
+        //Reads transactions.csv and adds resulting data to transactions arraylist
         while ((line = trackerBufReader.readLine()) != null) {
             String[] tokens = line.split("\\|");
             LocalDate date = LocalDate.parse(tokens[0], DATE_FMT);
@@ -349,6 +350,7 @@ public class FinancialTracker {
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
         int dateCounter = 0;
         for (Transaction transaction : transactions) {
+            //Uses compareTo() method to check if a transaction is within the bounds of the range given by the user
             if (transaction.getDate().compareTo(start) >= 0 && transaction.getDate().compareTo(end) <= 0) {
                 System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
                 dateCounter++;
@@ -417,6 +419,7 @@ public class FinancialTracker {
         int searchCounter = 0;
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
         for (Transaction transaction : transactions) {
+            //Checks to see whether user provided a complete date range, just an upper or lower bound, or no date bounds at all, and then matches transactions based on remaining provided criteria
             if (startDateInputParsed != null && endDateInputParsed != null) {
                 if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && transaction.getDate().compareTo(endDateInputParsed) <= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
                     System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
