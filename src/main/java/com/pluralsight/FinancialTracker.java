@@ -41,7 +41,6 @@ public class FinancialTracker {
        Main menu
        ------------------------------------------------------------------ */
     public static void main(String[] args) throws IOException {
-//        try {
         loadTransactions(FILE_NAME);
 
         Scanner scanner = new Scanner(System.in);
@@ -191,7 +190,7 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Ledger menu
        ------------------------------------------------------------------ */
-    private static void ledgerMenu(Scanner scanner) {
+    private static void ledgerMenu(Scanner scanner) throws IOException {
         boolean running = true;
         while (running) {
             System.out.println("Ledger");
@@ -268,7 +267,7 @@ public class FinancialTracker {
     /* ------------------------------------------------------------------
        Reports menu
        ------------------------------------------------------------------ */
-    private static void reportsMenu(Scanner scanner) {
+    private static void reportsMenu(Scanner scanner) throws IOException {
         boolean running = true;
         while (running) {
             System.out.println("Reports");
@@ -376,7 +375,7 @@ public class FinancialTracker {
         }
     }
 
-    private static void customSearch(Scanner scanner) {
+    private static void customSearch(Scanner scanner) throws IOException {
         Collections.sort(transactions);
         LocalDate endDateInputParsed = null;
         LocalDate startDateInputParsed = null;
@@ -410,6 +409,10 @@ public class FinancialTracker {
                 vendorInput,
                 amountInputParsed,
                 searchTimeStamp);
+        FileWriter fileWriter = new FileWriter("searches.csv", true);
+        BufferedWriter searchBufWriter = new BufferedWriter(fileWriter);
+        searchBufWriter.write(searchTimeStamp + "|"  + startDateInputParsed + "|" + endDateInputParsed + "|" + descriptionInput + "|" + vendorInput + "|" + amountInputParsed);
+        searchBufWriter.newLine();
         searches.add(newSearch);
         int searchCounter = 0;
         System.out.println("Date" + " | " + "Time" + " | " + "Description" + " | " + "Vendor" + " | " + "Amount");
@@ -419,7 +422,7 @@ public class FinancialTracker {
                     System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
                     searchCounter++;
                 }
-            } else if (startDateInputParsed != null && endDateInputParsed == null) {
+            } else if (startDateInputParsed != null) {
                 if (transaction.getDate().compareTo(startDateInputParsed) >= 0 && (transaction.getDescription().equalsIgnoreCase(descriptionInput) || descriptionInput.isEmpty()) && (transaction.getVendor().equalsIgnoreCase(vendorInput) || vendorInput.isEmpty()) && (transaction.getAmount() == amountInputParsed || amountInputParsed == 0)) {
                     System.out.println(transaction.getDate() + " | " + transaction.getTime() + " | " + transaction.getDescription() + " | " + transaction.getVendor() + " | " + transaction.getAmount());
                     searchCounter++;
@@ -440,8 +443,7 @@ public class FinancialTracker {
         if (searchCounter == 0) {
             System.out.println("No matching transactions found");
         }
-//            } catch (Exception e) {
-//                System.err.println("Error processing your search request");
-//            }
+        searchBufWriter.close();
+        fileWriter.close();
     }
 }
